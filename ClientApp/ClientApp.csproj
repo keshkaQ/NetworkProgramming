@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Images\**" />
+    <Compile Remove="RecipeImages\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <EmbeddedResource Remove="RecipeImages\**" />
+    <None Remove="Images\**" />
+    <None Remove="RecipeImages\**" />
+    <Page Remove="Images\**" />
+    <Page Remove="RecipeImages\**" />
+  </ItemGroup>
+
+</Project>

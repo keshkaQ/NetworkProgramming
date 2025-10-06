@@ -1,0 +1,126 @@
+﻿<Window
+    x:Class="ServerApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ServerApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Кулинарный помощник - ServerApp"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#3498DB" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="15,8" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row="0"
+            Margin="0,0,0,10"
+            Padding="15"
+            Background="#F8F9FA"
+            BorderBrush="#DDD"
+            BorderThickness="1">
+            <StackPanel>
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Foreground="#2C3E50"
+                    Text="Управление сервером" />
+
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock
+                            Width="40"
+                            VerticalAlignment="Center"
+                            FontWeight="Bold"
+                            Text="Порт:" />
+                        <TextBox
+                            x:Name="PortTextBox"
+                            Width="60"
+                            Height="25"
+                            Margin="5,0,20,0"
+                            VerticalContentAlignment="Center"
+                            Text="8888" />
+                    </StackPanel>
+                    <Button
+                        x:Name="StartServerButton"
+                        Click="StartServerButton_Click"
+                        Content="▶ Запустить сервер"
+                        Style="{StaticResource ButtonStyle}" />
+                    <Button
+                        x:Name="StopServerButton"
+                        Background="#E74C3C"
+                        Click="StopServerButton_Click"
+                        Content="⏹ Остановить сервер"
+                        IsEnabled="False"
+                        Style="{StaticResource ButtonStyle}" />
+                    <Button
+                        x:Name="ClearLogsButton"
+                        Background="#95A5A6"
+                        Click="ClearLogsButton_Click"
+                        Content="🧹 Очистить логи"
+                        Style="{StaticResource ButtonStyle}" />
+                </StackPanel>
+                <StackPanel Margin="0,10,0,0" Orientation="Horizontal">
+                    <StackPanel Margin="0,0,20,0" Orientation="Horizontal">
+                        <TextBlock FontWeight="Bold" Text="Статус:" />
+                        <TextBlock
+                            x:Name="ServerStatusText"
+                            Margin="10,0,0,0"
+                            FontWeight="Bold"
+                            Foreground="Red"
+                            Text="Остановлен" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="Bold" Text="Подключенные клиенты:" />
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            FontWeight="Bold"
+                            Foreground="#27AE60"
+                            Text="{Binding ConnectedClientsCount}" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Border
+            Grid.Row="1"
+            Padding="10"
+            Background="White"
+            BorderBrush="#DDD"
+            BorderThickness="1">
+            <StackPanel>
+                <TextBlock
+                    Margin="0,0,0,10"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="#2C3E50"
+                    Text="Логи сервера" />
+
+                <TextBox
+                    x:Name="LogsTextBox"
+                    Background="#1E1E1E"
+                    FontSize="10"
+                    Foreground="White"
+                    HorizontalScrollBarVisibility="Auto"
+                    IsReadOnly="True"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
