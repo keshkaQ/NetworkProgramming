@@ -1,0 +1,326 @@
+﻿<Window
+    x:Class="ClientChatApp.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Чат"
+    Width="1000"
+    Height="680">
+    <Window.Resources>
+        <Style x:Key="BorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="#DDD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Padding" Value="15" />
+        </Style>
+
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Height" Value="30" />
+        </Style>
+
+        <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#2C3E50" />
+        </Style>
+
+        <Style x:Key="InputTextBlockStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="5" />
+        </Style>
+        <Style x:Key="SelectedUserStyle" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="Background" Value="#3498DB" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="10" Background="#F8F9FA">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <Border Margin="0,0,0,15" Style="{StaticResource BorderStyle}">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        Style="{StaticResource HeaderTextBlockStyle}"
+                        Text="Вход в чат" />
+
+                    <TextBlock
+                        Margin="0,5,0,2"
+                        FontWeight="SemiBold"
+                        Foreground="#555"
+                        Text="Логин:" />
+                    <TextBox
+                        x:Name="LoginTextBox"
+                        Style="{StaticResource InputTextBlockStyle}"
+                        Text="{Binding LoginText, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <TextBlock
+                        Margin="0,10,0,2"
+                        FontWeight="SemiBold"
+                        Foreground="#555"
+                        Text="Пароль:" />
+                    <TextBox
+                        x:Name="PasswordBox"
+                        Height="30"
+                        Padding="5"
+                        Style="{StaticResource InputTextBlockStyle}"
+                        Text="{Binding PasswordText, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <Button
+                        Width="140"
+                        Margin="0,10,0,0"
+                        Background="Green"
+                        Command="{Binding ConnectCommand}"
+                        Content="Подключиться к серверу"
+                        Style="{StaticResource ButtonStyle}" />
+
+                    <StackPanel>
+                        <StackPanel
+                            Margin="0,15,0,0"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
+                            <Button
+                                Margin="0,0,10,0"
+                                Background="#3498DB"
+                                Command="{Binding LoginCommand}"
+                                Content="Войти"
+                                Style="{StaticResource ButtonStyle}" />
+                            <Button
+                                Background="#27AE60"
+                                Command="{Binding RegisterCommand}"
+                                Content="Регистрация"
+                                Style="{StaticResource ButtonStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Button
+                        Margin="0,10,0,0"
+                        Background="Red"
+                        Command="{Binding ExitCommand}"
+                        Content="Выйти"
+                        IsEnabled="{Binding IsAuthenticated}"
+                        Style="{StaticResource ButtonStyle}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource BorderStyle}">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        Style="{StaticResource HeaderTextBlockStyle}"
+                        Text="Онлайн пользователи" />
+                    <ListBox
+                        Height="200"
+                        BorderThickness="0"
+                        ItemsSource="{Binding OnlineUsers}"
+                        SelectedItem="{Binding SelectedUser}"
+                        SelectionMode="Single">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Padding="5" Text="{Binding UserName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Button
+                        Width="140"
+                        Margin="0,10,0,0"
+                        Background="#9B59B6"
+                        Command="{Binding PrivateChatCommand}"
+                        Content="Личное сообщение"
+                        IsEnabled="{Binding CanStartPrivateChat}"
+                        Style="{StaticResource ButtonStyle}"
+                        ToolTip="Выберите пользователя и нажмите для начала приватного чата" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Margin="10,0,0,0">
+            <Border Margin="0,0,0,10" Style="{StaticResource BorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="chatTitleTextBlock"
+                        Style="{StaticResource HeaderTextBlockStyle}"
+                        Text="{Binding ChatTitle}" />
+                </StackPanel>
+            </Border>
+
+            <Border Margin="0,0,0,10" Style="{StaticResource BorderStyle}">
+                <ScrollViewer
+                    x:Name="messagesScrollViewer"
+                    Height="300"
+                    VerticalScrollBarVisibility="Auto">
+                    <ItemsControl
+                        x:Name="messagesItemsControl"
+                        BorderThickness="0"
+                        ItemsSource="{Binding DisplayedMessages}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="0,5"
+                                    Padding="15,10"
+                                    Background="{Binding Background}"
+                                    BorderBrush="#E0E0E0"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                    <StackPanel>
+                                        <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                            <TextBlock
+                                                FontSize="12"
+                                                FontWeight="Bold"
+                                                Foreground="{Binding SenderColor}"
+                                                Text="{Binding Sender}" />
+                                            <TextBlock
+                                                Margin="10,0,0,0"
+                                                VerticalAlignment="Center"
+                                                FontSize="10"
+                                                Foreground="#888"
+                                                Text="{Binding Timestamp, StringFormat='HH:mm'}" />
+                                        </StackPanel>
+                                        <TextBlock
+                                            FontSize="13"
+                                            Foreground="{Binding TextColor}"
+                                            Text="{Binding Message}"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+
+            <Border Style="{StaticResource BorderStyle}">
+                <StackPanel>
+                    <TextBox
+                        Height="60"
+                        AcceptsReturn="True"
+                        IsEnabled="{Binding IsAuthenticated}"
+                        Text="{Binding MessageText, UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap"
+                        ToolTip="Введите сообщение..."
+                        VerticalScrollBarVisibility="Auto" />
+                    <StackPanel
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="0,0,10,0"
+                            Background="#3498DB"
+                            Command="{Binding SendMessageCommand}"
+                            Content="Отправить"
+                            IsEnabled="{Binding CanSendMessage}"
+                            Style="{StaticResource ButtonStyle}" />
+                        <Button
+                            Background="#95A5A6"
+                            Command="{Binding ClearMessageCommand}"
+                            Content="Очистить"
+                            Style="{StaticResource ButtonStyle}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Margin="10,0,0,0">
+            <Border Style="{StaticResource BorderStyle}">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontSize="14"
+                        Style="{StaticResource HeaderTextBlockStyle}"
+                        Text="Комнаты чата" />
+
+                    <TextBox
+                        x:Name="roomNameTextBox"
+                        IsEnabled="{Binding IsAuthenticated}"
+                        Style="{StaticResource InputTextBlockStyle}"
+                        Text="{Binding RoomNumberText, UpdateSourceTrigger=PropertyChanged}"
+                        ToolTip="Название комнаты" />
+
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Button
+                            x:Name="createRoomButton"
+                            Margin="0,10,10,0"
+                            Background="Green"
+                            Command="{Binding CreateRoomCommand}"
+                            Content="Создать"
+                            Style="{StaticResource ButtonStyle}" />
+                        <Button
+                            x:Name="joinRoomButton"
+                            Margin="0,10,10,0"
+                            Background="#3498DB"
+                            Command="{Binding JoinRoomCommand}"
+                            Content="Войти"
+                            IsEnabled="{Binding CanJoinRoom}"
+                            Style="{StaticResource ButtonStyle}" />
+                    </StackPanel>
+                    <Button
+                        x:Name="leaveRoomButton"
+                        Margin="0,10,10,0"
+                        Background="Red"
+                        Command="{Binding LeaveRoomCommand}"
+                        Content="Покинуть"
+                        IsEnabled="{Binding IsAuthenticated}"
+                        Style="{StaticResource ButtonStyle}" />
+                </StackPanel>
+            </Border>
+
+            <Border Margin="0,10,0,0" Style="{StaticResource BorderStyle}">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,10"
+                        FontSize="12"
+                        Foreground="#555"
+                        Style="{StaticResource HeaderTextBlockStyle}"
+                        Text="Доступные комнаты" />
+                    <ListBox
+                        x:Name="roomsListBox"
+                        Height="300"
+                        BorderThickness="0"
+                        ItemsSource="{Binding AvailableRooms}"
+                        SelectedItem="{Binding SelectedRoom}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+                                    Margin="0,2"
+                                    Padding="5"
+                                    Background="#F8F9FA"
+                                    CornerRadius="3">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock FontWeight="SemiBold" Text="Название: " />
+                                            <TextBlock FontWeight="SemiBold" Text="{Binding RoomName}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                FontSize="10"
+                                                Foreground="#777"
+                                                Text="Кол-во участников: " />
+                                            <TextBlock
+                                                FontSize="10"
+                                                Foreground="#777"
+                                                Text="{Binding UserCount}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>
