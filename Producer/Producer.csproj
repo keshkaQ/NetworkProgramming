@@ -1,0 +1,155 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\iphone12_black.png" />
+    <None Remove="Images\iphone12_green.png" />
+    <None Remove="Images\iphone12_purple.png" />
+    <None Remove="Images\iphone12_red.png" />
+    <None Remove="Images\iphone12_white.png" />
+    <None Remove="Images\iphone13_black.png" />
+    <None Remove="Images\iphone13_blue.png" />
+    <None Remove="Images\iphone13_pink.png" />
+    <None Remove="Images\iphone13_white.png" />
+    <None Remove="Images\iphone14_black.png" />
+    <None Remove="Images\iphone14_blue.png" />
+    <None Remove="Images\iphone14_purple.png" />
+    <None Remove="Images\iphone14_red.png" />
+    <None Remove="Images\iphone14_yellow.png" />
+    <None Remove="Images\iphone15plus_blue.png" />
+    <None Remove="Images\iphone15plus_green.png" />
+    <None Remove="Images\iphone15pro_black.png" />
+    <None Remove="Images\iphone15pro_blue.png" />
+    <None Remove="Images\iphone15pro_natural.png" />
+    <None Remove="Images\iphone15pro_white.png" />
+    <None Remove="Images\iphone15_black.png" />
+    <None Remove="Images\iphone15_blue.png" />
+    <None Remove="Images\iphone15_green.png" />
+    <None Remove="Images\iphone15_pink.png" />
+    <None Remove="Images\iphone15_yellow.png" />
+    <None Remove="Images\iphone16pro_black.png" />
+    <None Remove="Images\iphone16pro_natural.png" />
+    <None Remove="Images\iphone16pro_white.png" />
+    <None Remove="Images\iphone16_black.png" />
+    <None Remove="Images\iphone16_blue.png" />
+    <None Remove="Images\iphone16_green.png" />
+    <None Remove="Images\iphone16_pink.png" />
+    <None Remove="Images\iphone16_white.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.9" />
+    <PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\iphone12_black.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone12_green.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone12_purple.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone12_red.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone12_white.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone13_black.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone13_blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone13_pink.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone13_white.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone14_black.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone14_blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone14_purple.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone14_red.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone14_yellow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15plus_blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15plus_green.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15pro_black.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15pro_blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15pro_natural.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15pro_white.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15_black.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15_blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15_green.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15_pink.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone15_yellow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone16pro_black.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone16pro_natural.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone16pro_white.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone16_black.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone16_blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone16_green.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone16_pink.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\iphone16_white.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>
