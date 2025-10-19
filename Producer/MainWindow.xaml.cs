@@ -63,7 +63,14 @@ namespace Producer
 
         private async void InitializeMessaging()
         {
-            await _messageService.InitializeAsync();
+            try
+            {
+                await _messageService.InitializeAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка инициализации RabbitMQ: {ex.Message}","Ошибка подключения", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void LoadIphoneModel()
@@ -169,24 +176,8 @@ namespace Producer
 
         private async void OrderButton_Click(object sender, RoutedEventArgs e)
         {
-            if (SelectedModel == null || CurrentiPhone == null)
-            {
-                MessageBox.Show("Пожалуйста, выберите iPhone", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!ValidateOrderData())
                 return;
-            }
-
-            if (SimListBox.SelectedItem == null)
-            {
-                MessageBox.Show("Пожалуйста, выберите тип SIM-карты", "Неполные данные", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(customerName.Text) || string.IsNullOrWhiteSpace(customerEmail.Text))
-            {
-                MessageBox.Show("Пожалуйста, введите Ваше имя и Email", "Неполные данные", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
             var selectedSim = (SimListBox.SelectedItem as ListBoxItem)?.Content.ToString();
 
             try
@@ -215,11 +206,42 @@ namespace Producer
                               $"SIM: {selectedSim}\n" +
                               $"Итоговая цена: {FinalPrice}",
                               "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                customerName.Text = "";
+                customerEmail.Text = "";
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при отправке заказа: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        private bool ValidateOrderData()
+        {
+            if (SelectedModel == null || CurrentiPhone == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите iPhone", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (SimListBox.SelectedItem == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите тип SIM-карты", "Неполные данные", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(customerName.Text) || !IsValidName(customerName.Text))
+            {
+                MessageBox.Show("Пожалуйста, введите корректное имя", "Неполные данные", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(customerEmail.Text) || !IsValidEmail(customerEmail.Text))
+            {
+                MessageBox.Show("Пожалуйста, введите корректный Email", "Неполные данные", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

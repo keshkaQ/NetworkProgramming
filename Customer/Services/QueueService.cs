@@ -18,6 +18,11 @@ namespace Consumer.Services
         {
             try
             {
+                if (_isListening)
+                { 
+                    OnStatusChanged("Уже слушаем очередь");
+                    return;
+                }
                 var factory = new ConnectionFactory { HostName = "localhost" };
                 _connection = await factory.CreateConnectionAsync();
                 _channel = await _connection.CreateChannelAsync();
@@ -34,10 +39,17 @@ namespace Consumer.Services
                 var consumer = new AsyncEventingBasicConsumer(_channel);
                 consumer.ReceivedAsync += async (model, ea) =>
                 {
-                    var body = ea.Body.ToArray();
-                    var message = Encoding.UTF8.GetString(body);
-                    LogShortMessageInfo(message);
-                    OnMessageReceived(message);
+                    try
+                    {
+                        var body = ea.Body.ToArray();
+                        var message = Encoding.UTF8.GetString(body);
+                        LogShortMessageInfo(message);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnStatusChanged($"Ошибка обработки сообщения: {ex.Message}");
+                    }
+                  
                 };
 
                 await _channel.BasicConsumeAsync(
@@ -50,7 +62,7 @@ namespace Consumer.Services
             }
             catch (Exception ex)
             {
-                OnStatusChanged($"Ошибка: {ex.Message}");
+                _isListening = false;
                 throw;
             }
         }
@@ -104,17 +116,19 @@ namespace Consumer.Services
         {
             try
             {
-                if (_channel != null)
+                if (_channel?.IsOpen == true)
                 {
                     await _channel.CloseAsync();
-                    _channel = null;
                 }
+                _channel?.Dispose();
+                _channel = null;
 
-                if (_connection != null)
+                if (_connection?.IsOpen == true)
                 {
                     await _connection.CloseAsync();
-                    _connection = null;
                 }
+                _connection?.Dispose();
+                _connection = null;
 
                 _isListening = false;
                 OnStatusChanged("Очередь остановлена");
@@ -129,10 +143,6 @@ namespace Consumer.Services
         protected virtual void OnStatusChanged(string status)
         {
             StatusChanged?.Invoke(status);
-        }
-        protected virtual void OnMessageReceived(string message)
-        {
-            MessageReceived?.Invoke(message);
         }
     }
 }

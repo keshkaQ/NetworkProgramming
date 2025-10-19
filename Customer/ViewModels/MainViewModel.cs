@@ -61,17 +61,19 @@ namespace Consumer.ViewModels
             StopQueueCommand = new RelayCommand(StopQueueAsync, () => IsQueueRunning);
             ClearLogsCommand = new RelayCommand(ClearLogs);
         }
-        private void StartQueueAsync()
+        private async void StartQueueAsync()
         {
             try
             {
-                 _queueService.StartListeningAsync();
+                await _queueService.StartListeningAsync();
                 IsQueueRunning = true;
                 QueueStatus = "Запущена";
                 QueueStatusColor = Brushes.Green;
             }
             catch (Exception ex)
             {
+                QueueStatus = "Остановлена";
+                QueueStatusColor = Brushes.Red;
                 LogMessage($"Ошибка запуска: {ex.Message}");
             }
         }
